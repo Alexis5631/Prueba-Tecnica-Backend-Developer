@@ -296,20 +296,3 @@ curl -X POST http://localhost:8000/students \
 # Obtener todos los estudiantes
 curl http://localhost:8000/students
 ```
-
----
-
----
-
-## 📚 Documentación Adicional
-
-### .NET - Autotaller
-- Documentación Swagger disponible en `/swagger`
-- Configuración JWT en `Helpers/JWT.cs`
-- Manejo de errores en `Helpers/Errors/`
-
-### PHP - Sistema de Notas
-- Documentación Swagger disponible en `/swagger/index.html`
-- Especificación OpenAPI en `/swagger/swagger.json`
-
----
