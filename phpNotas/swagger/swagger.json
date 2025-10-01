@@ -1,0 +1,189 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Sistema de Notas",
+    "version": "1.0.0",
+    "description": "API en PHP para gestionar estudiantes, profesores, materias y notas"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000"
+    }
+  ],
+  "tags": [
+    { "name": "Estudiantes", "description": "Operaciones relacionadas con estudiantes" },
+    { "name": "Profesores", "description": "Operaciones relacionadas con profesores" },
+    { "name": "Materias", "description": "Operaciones relacionadas con materias" },
+    { "name": "Notas", "description": "Operaciones relacionadas con calificaciones" }
+  ],
+  "paths": {
+    "/students": {
+      "get": {
+        "tags": ["Estudiantes"],
+        "summary": "Listar estudiantes",
+        "responses": {
+          "200": { "description": "Lista de estudiantes" }
+        }
+      },
+      "post": {
+        "tags": ["Estudiantes"],
+        "summary": "Crear estudiante",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "registration": { "type": "string" }
+                },
+                "required": ["name", "registration"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Estudiante creado" }
+        }
+      }
+    },
+    "/teachers": {
+      "get": {
+        "tags": ["Profesores"],
+        "summary": "Listar profesores",
+        "responses": {
+          "200": { "description": "Lista de profesores" }
+        }
+      },
+      "post": {
+        "tags": ["Profesores"],
+        "summary": "Crear profesor",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Profesor creado" }
+        }
+      }
+    },
+    "/subjects": {
+      "get": {
+        "tags": ["Materias"],
+        "summary": "Listar materias (con profesor)",
+        "responses": {
+          "200": { "description": "Lista de materias" }
+        }
+      },
+      "post": {
+        "tags": ["Materias"],
+        "summary": "Crear materia",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "teacher_id": { "type": "integer" }
+                },
+                "required": ["name", "teacher_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Materia creada" }
+        }
+      }
+    },
+    "/grades": {
+      "post": {
+        "tags": ["Notas"],
+        "summary": "Registrar calificación",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "student_id": { "type": "integer" },
+                  "subject_id": { "type": "integer" },
+                  "grade": { "type": "number", "format": "float" }
+                },
+                "required": ["student_id", "subject_id", "grade"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Nota registrada" }
+        }
+      }
+    },
+    "/grades/student/{id}": {
+      "get": {
+        "tags": ["Notas"],
+        "summary": "Listar notas de un estudiante",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Notas del estudiante" }
+        }
+      }
+    },
+    "/grades/average": {
+      "get": {
+        "tags": ["Notas"],
+        "summary": "Obtener promedio de un estudiante",
+        "parameters": [
+          {
+            "name": "student_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Promedio del estudiante" }
+        }
+      }
+    },
+    "/grades/subject/{id}": {
+      "get": {
+        "tags": ["Notas"],
+        "summary": "Obtener notas de todos los estudiantes en una materia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Notas por materia" }
+        }
+      }
+    }
+  }
+}
