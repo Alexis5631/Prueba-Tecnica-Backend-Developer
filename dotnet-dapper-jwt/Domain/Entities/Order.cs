@@ -12,6 +12,6 @@ namespace Domain.Entities
 		public decimal Total { get; set; }
 
 		public User? User { get; set; }
-		public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+		public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 	}
 }

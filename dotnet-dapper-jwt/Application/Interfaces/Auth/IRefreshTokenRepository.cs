@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Entities;
 
-namespace Application.Interfaces.Auth
+namespace Application.Interfaces
 {
-    public class IRefreshTokenRepository
+    public interface IRefreshTokenRepository : IGenericRepository<RefreshToken>
     {
         
     }

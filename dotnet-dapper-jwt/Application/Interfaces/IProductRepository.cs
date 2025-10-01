@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 using Domain.Entities;
 
-namespace Domain.Repositories
+namespace Application.Interfaces
 {
-	public interface IProductRepository : IRepository<Product>
+	public interface IProductRepository : IGenericRepository<Product>
 	{
-		Task<Product?> GetBySkuAsync(string sku);
 	}
 }
 

@@ -1,12 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
-using Domain.Repositories;
-using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
+using Infrastructure.Data;
 
 namespace Infrastructure.Repositories
 {
-	public class ProductRepository : IProductRepository
+	public class ProductRepository : GenericRepository<Product>, IProductRepository
 	{
 		protected readonly PruebaDbContext _context;
 

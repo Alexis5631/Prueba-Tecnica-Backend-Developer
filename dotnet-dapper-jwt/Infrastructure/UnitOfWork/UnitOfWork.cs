@@ -6,12 +6,14 @@ namespace Infrastructure.UnitOfWork
 {
 	public class UnitOfWork : IUnitOfWork, IDisposable
 	{
-		private IRoleRepository _roleRepository;
-		private IUserRepository _userRepository;
-		private IProductRepository _productRepository;
-		private IOrderRepository _orderRepository;
-		private IOrderItemRepository _orderItemRepository;
-		private IRefreshTokenRepository _refreshTokenRepository;
+		private IRoleRepository? _roleRepository;
+		private IUserRepository? _userRepository;
+		private IProductRepository? _productRepository;
+		private IOrderRepository? _orderRepository;
+		private IOrderItemRepository? _orderItemRepository;
+		private IRefreshTokenRepository? _refreshTokenRepository;
+
+		private readonly PruebaDbContext _context;
 
 		public UnitOfWork(PruebaDbContext context)
 		{

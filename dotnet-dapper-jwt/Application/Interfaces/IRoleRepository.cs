@@ -1,8 +1,8 @@
 using Domain.Entities;
 
-namespace Domain.Repositories
+namespace Application.Interfaces
 {
-	public interface IRoleRepository : IRepository<Role>
+	public interface IRoleRepository : IGenericRepository<Role>
 	{
 	}
 }

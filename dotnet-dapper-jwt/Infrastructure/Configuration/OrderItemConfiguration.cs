@@ -24,12 +24,12 @@ namespace Infrastructure.Configuration
                 .IsRequired();
 
             builder.HasOne(od => od.Order)
-                .WithMany(o => o.OrderDetails)
+                .WithMany(o => o.OrderItems)
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(od => od.Product)
-                .WithMany(p => p.OrderDetails)
+                .WithMany(p => p.OrderItems)
                 .HasForeignKey(od => od.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
                 

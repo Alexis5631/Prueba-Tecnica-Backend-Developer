@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.Entities;
 
-namespace Domain.Repositories
+namespace Application.Interfaces
 {
-	public interface IOrderItemRepository : IRepository<OrderItem>
+	public interface IOrderItemRepository : IGenericRepository<OrderItem>
 	{
-		Task<IReadOnlyList<OrderItem>> ListByOrderAsync(int orderId);
 	}
 }
 

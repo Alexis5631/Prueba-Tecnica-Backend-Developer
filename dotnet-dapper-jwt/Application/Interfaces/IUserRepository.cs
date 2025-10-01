@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 using Domain.Entities;
 
-namespace Domain.Repositories
+namespace Application.Interfaces
 {
-	public interface IUserRepository : IRepository<User>
+	public interface IUserRepository : IGenericRepository<User>
 	{
-		Task<User?> GetByUsernameAsync(string username);
 	}
 }
 
