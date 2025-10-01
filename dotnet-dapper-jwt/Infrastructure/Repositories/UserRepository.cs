@@ -6,10 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-	public class UserRepository : Repository<User>, IUserRepository
+	public class UserRepository : IUserRepository
 	{
-		public UserRepository(AppDbContext dbContext) : base(dbContext)
+		protected readonly PruebaDbContext _context;
+
+		public UserRepository(PruebaDbContext context) : base(context)
 		{
+			_context = context;
 		}
 
 		public async Task<User?> GetByUsernameAsync(string username)

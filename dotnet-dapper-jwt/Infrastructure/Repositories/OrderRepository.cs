@@ -8,15 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-	public class OrderRepository : Repository<Order>, IOrderRepository
+	public class OrderRepository : IOrderRepository
 	{
-		public OrderRepository(AppDbContext dbContext) : base(dbContext)
-		{
-		}
+		protected readonly PruebaDbContext _context;
 
-		public async Task<IReadOnlyList<Order>> ListByUserAsync(int userId)
+		public OrderRepository(PruebaDbContext context) : base(context)
 		{
-			return await DbContext.Orders.AsNoTracking().Where(o => o.UserId == userId).ToListAsync();
+			_context = context;
 		}
 	}
 }

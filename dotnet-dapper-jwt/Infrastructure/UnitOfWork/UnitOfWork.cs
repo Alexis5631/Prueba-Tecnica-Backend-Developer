@@ -1,42 +1,103 @@
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.Repositories;
+using Application.Interfaces;
+using Infrastructure.Data;
 using Infrastructure.Repositories;
 
 namespace Infrastructure.UnitOfWork
 {
-	public class UnitOfWork : IUnitOfWork
+	public class UnitOfWork : IUnitOfWork, IDisposable
 	{
-		private readonly AppDbContext _dbContext;
+		private IRoleRepository _roleRepository;
+		private IUserRepository _userRepository;
+		private IProductRepository _productRepository;
+		private IOrderRepository _orderRepository;
+		private IOrderItemRepository _orderItemRepository;
+		private IRefreshTokenRepository _refreshTokenRepository;
 
-		private IRoleRepository _roles;
-		private IUserRepository _users;
-		private IProductRepository _products;
-		private IOrderRepository _orders;
-		private IOrderItemRepository _orderItems;
-		private IAuditoryRepository _audits;
-
-		public UnitOfWork(AppDbContext dbContext)
+		public UnitOfWork(PruebaDbContext context)
 		{
-			_dbContext = dbContext;
+			_context = context;
 		}
 
-		public IRoleRepository Roles => _roles ??= new RoleRepository(_dbContext);
-		public IUserRepository Users => _users ??= new UserRepository(_dbContext);
-		public IProductRepository Products => _products ??= new ProductRepository(_dbContext);
-		public IOrderRepository Orders => _orders ??= new OrderRepository(_dbContext);
-		public IOrderItemRepository OrderItems => _orderItems ??= new OrderItemRepository(_dbContext);
-		public IAuditoryRepository Audits => _audits ??= new AuditoryRepository(_dbContext);
-
-		public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		public IRoleRepository RoleRepository
 		{
-			return _dbContext.SaveChangesAsync(cancellationToken);
+			get
+			{
+				if (_roleRepository == null)
+				{
+					_roleRepository = new RoleRepository(_context);
+				}
+				return _roleRepository;
+			}
 		}
 
-		public void Dispose()
+		public IProductRepository ProductRepository
 		{
-			_dbContext.Dispose();
+			get
+			{
+				if (_productRepository == null)
+				{
+					_productRepository = new ProductRepository(_context);
+				}
+				return _productRepository;
+			}
 		}
+
+		public IOrderRepository OrderRepository
+		{
+			get
+			{
+				if (_orderRepository == null)
+				{
+					_orderRepository = new OrderRepository(_context);
+				}
+				return _orderRepository;
+			}
+		}
+
+		public IOrderItemRepository OrderItemRepository
+		{
+			get
+			{
+				if (_orderItemRepository == null)
+				{
+					_orderItemRepository = new OrderItemRepository(_context);
+				}
+				return _orderItemRepository;
+			}
+		}
+
+		public IRefreshTokenRepository RefreshTokenRepository
+		{
+			get
+			{
+				if (_refreshTokenRepository == null)
+				{
+					_refreshTokenRepository = new RefreshTokenRepository(_context);
+				}
+				return _refreshTokenRepository;
+			}
+		}	
+		public IUserRepository UserRepository
+		{
+			get
+			{
+				if (_userRepository == null)
+				{
+					_userRepository = new UserRepository(_context);
+				}
+				return _userRepository;
+			}
+		}	
+		
+		public async Task<int> SaveAsync()
+		{
+			return await _context.SaveChangesAsync();
+		}
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
 	}
 }
 

@@ -1,13 +1,15 @@
 using Domain.Entities;
-using Domain.Repositories;
-using Infrastructure.Persistence;
+using Application.Interfaces;
 
 namespace Infrastructure.Repositories
 {
-	public class RoleRepository : Repository<Role>, IRoleRepository
+	public class RoleRepository : IRoleRepository
 	{
-		public RoleRepository(AppDbContext dbContext) : base(dbContext)
+		protected readonly PruebaDbContext _context;
+
+		public RoleRepository(PruebaDbContext context) : base(context)
 		{
+			_context = context;
 		}
 	}
 }

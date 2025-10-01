@@ -6,15 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-	public class ProductRepository : Repository<Product>, IProductRepository
+	public class ProductRepository : IProductRepository
 	{
-		public ProductRepository(AppDbContext dbContext) : base(dbContext)
-		{
-		}
+		protected readonly PruebaDbContext _context;
 
-		public async Task<Product?> GetBySkuAsync(string sku)
+		public ProductRepository(PruebaDbContext context) : base(context)
 		{
-			return await DbContext.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Sku == sku);
+			_context = context;
 		}
 	}
 }

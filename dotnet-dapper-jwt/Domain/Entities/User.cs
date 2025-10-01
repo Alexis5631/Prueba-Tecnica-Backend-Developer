@@ -8,13 +8,15 @@ namespace Domain.Entities
 	public class User : BaseEntity
 	{
 		public int Id { get; set; }
-		public string Username { get; set; } = default!;
-		public string PasswordHash { get; set; } = default!;
+		public string? Username { get; set; }
+		public string? PasswordHash { get; set; }
 		public int? RoleId { get; set; }
-		public DateTime CreatedAt { get; set; }
+		public bool IsActive { get; set; } = true;
 
 		public Role? Role { get; set; }
-		public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+		public ICollection<RefreshToken> RefreshTokens { get; set; } = new HashSet<RefreshToken>();
+		public ICollection<Order> Orders { get; set; } = new HashSet<Order>();
 	}
 }
 
