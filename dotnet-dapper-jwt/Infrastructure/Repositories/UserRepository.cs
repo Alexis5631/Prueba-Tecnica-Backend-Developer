@@ -16,6 +16,22 @@ namespace Infrastructure.Repositories
 		{
 			_context = context;
 		}
+
+		public async Task<User?> GetByUsernameAsync(string username)
+		{
+			return await _context.Users
+				.Include(u => u.Role)               // relación directa
+				.Include(u => u.RefreshTokens)      // tokens
+				.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+		}
+
+		public async Task<User?> GetByRefreshTokenAsync(string refreshToken)
+		{
+			return await _context.Users
+				.Include(u => u.Role)               // relación directa
+				.Include(u => u.RefreshTokens)      // tokens
+				.FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+		}
 	}
 }
 

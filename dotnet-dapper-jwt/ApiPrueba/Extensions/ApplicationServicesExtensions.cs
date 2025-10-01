@@ -31,6 +31,8 @@ namespace ApiPrueba.Extensions
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<ApiPrueba.Services.IUserService, ApiPrueba.Services.UserService>();
+            services.AddHttpContextAccessor();
 
         }
 

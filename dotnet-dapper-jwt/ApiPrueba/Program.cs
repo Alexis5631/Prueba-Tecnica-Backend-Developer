@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PRUEBA PLANERA IP API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PRUEBA PLANETA IP API", Version = "v1" });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -44,7 +44,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddDbContext<AutoTallerDbContext>(options =>
+builder.Services.AddDbContext<PruebaDbContext>(options =>
 {
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
     options.UseNpgsql(connectionString);
