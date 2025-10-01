@@ -303,7 +303,7 @@ curl http://localhost:8000/students
 
 ## 📚 Documentación Adicional
 
-### .NET - Autotaller
+### .NET - Inventario
 - Documentación Swagger disponible en `/swagger`
 - Configuración JWT en `Helpers/JWT.cs`
 - Manejo de errores en `Helpers/Errors/`
