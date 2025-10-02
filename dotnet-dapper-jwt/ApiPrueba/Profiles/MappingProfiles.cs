@@ -28,19 +28,33 @@ public class MappingProfiles : Profile
         CreateMap<User, UpdateUserDto>().ReverseMap();
 
         // Role mappings
-        CreateMap<Role, RoleDto>().ReverseMap();
+        CreateMap<Role, RoleDto>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ReverseMap()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.CreatedAt)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.UpdatedAt)));
         CreateMap<Role, CreateRoleDto>().ReverseMap();
         CreateMap<Role, UpdateRoleDto>().ReverseMap();
 
         // Product mappings
-        CreateMap<Product, ProductDto>().ReverseMap();
+        CreateMap<Product, ProductDto>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ReverseMap()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.CreatedAt)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.UpdatedAt)));
         CreateMap<Product, CreateProductDto>().ReverseMap();
         CreateMap<Product, UpdateProductDto>().ReverseMap();
 
         // Order mappings
         CreateMap<Order, OrderDto>()
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User != null ? src.User.Username : null))
-            .ReverseMap();
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ReverseMap()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.CreatedAt)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.UpdatedAt)));
 
         CreateMap<Order, CreateOrderDto>().ReverseMap();
         CreateMap<Order, UpdateOrderDto>().ReverseMap();
@@ -49,7 +63,11 @@ public class MappingProfiles : Profile
         CreateMap<OrderItem, OrderItemDto>()
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : null))
             .ForMember(dest => dest.ProductSku, opt => opt.MapFrom(src => src.Product != null ? src.Product.Sku : null))
-            .ReverseMap();
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ReverseMap()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.CreatedAt)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.UpdatedAt)));
 
         CreateMap<OrderItem, CreateOrderItemDto>().ReverseMap();
         CreateMap<OrderItem, UpdateOrderItemDto>().ReverseMap();

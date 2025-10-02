@@ -30,6 +30,10 @@ namespace ApiPrueba.Controllers
         {
             var userId = int.Parse(User.FindFirstValue("uid") ?? "0");
 
+            // Validate user exists
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null) return BadRequest("Usuario no válido");
+
             if (orderDto.OrderItems == null || !orderDto.OrderItems.Any()) 
                 return BadRequest("Items vacíos");
 
@@ -113,6 +117,13 @@ namespace ApiPrueba.Controllers
         {
             var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
             if (order == null) return NotFound();
+
+            // Validate user exists if UserId is being updated
+            if (orderDto.UserId.HasValue)
+            {
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(orderDto.UserId.Value);
+                if (user == null) return BadRequest("Usuario no válido");
+            }
 
             _mapper.Map(orderDto, order);
             order.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);

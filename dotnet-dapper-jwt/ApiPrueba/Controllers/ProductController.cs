@@ -72,6 +72,13 @@ namespace ApiPrueba.Controllers
             var existing = await _unitOfWork.ProductRepository.GetByIdAsync(id);
             if (existing == null) return NotFound();
 
+            // Validate SKU uniqueness excluding current product
+            var skuInUse = _unitOfWork.ProductRepository
+                .Find(p => p.Sku == productDto.Sku && p.Id != id)
+                .Any();
+            if (skuInUse)
+                return BadRequest(new { message = "SKU ya registrado" });
+
             _mapper.Map(productDto, existing);
             existing.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
 
