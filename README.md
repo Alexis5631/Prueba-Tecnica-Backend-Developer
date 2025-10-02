@@ -91,7 +91,7 @@ dotnet-dapper-jwt/
 
 4. **Ejecutar migraciones**:
    ```bash
-   dotnet ef database update --project Infrastructure --startup-project ApiPrueba
+   dotnet ef database update -p .\\Infrastructure\\ -s .\\ApiPrueba\\
    ```
 
 5. **Ejecutar la aplicación**:
