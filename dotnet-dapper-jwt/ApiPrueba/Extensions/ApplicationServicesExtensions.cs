@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ApiPrueba.Helpers.Errors;
+using System.Data;
+using Npgsql;
 
 namespace ApiPrueba.Extensions
 {
@@ -33,6 +35,12 @@ namespace ApiPrueba.Extensions
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<ApiPrueba.Services.IUserService, ApiPrueba.Services.UserService>();
             services.AddHttpContextAccessor();
+            services.AddScoped<IDbConnection>(sp =>
+            {
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                var cs = configuration.GetConnectionString("DefaultConnection");
+                return new NpgsqlConnection(cs);
+            });
 
         }
 
@@ -45,7 +53,7 @@ namespace ApiPrueba.Extensions
                     var ip = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "desconocida";
                     context.HttpContext.Response.StatusCode = 429;
                     context.HttpContext.Response.ContentType = "application/json";
-                    var mensaje = $"{{\"message\": \"Demasiadas peticiones desde la IP {ip}. Intenta más tarde.\"}}";
+                    var mensaje = "{\"message\": \"Demasiadas peticiones desde la IP " + ip + ". Intenta más tarde.\"}";
                     await context.HttpContext.Response.WriteAsync(mensaje, token);
                 };
 
@@ -97,30 +105,12 @@ namespace ApiPrueba.Extensions
                     services.AddAuthorization(options =>
                     {
                         // Solo Admins
-                options.AddPolicy("AdminOnly", policy =>
-                    policy.RequireRole("Administrator"));
+                        options.AddPolicy("AdminOnly", policy =>
+                            policy.RequireRole("Administrator"));
+                        // Admins y Users
+                        options.AddPolicy("AdminAndUser", policy =>
+                            policy.RequireRole("Administrator", "User"));
 
-                // Solo Mechanics
-                options.AddPolicy("MechanicOnly", policy =>
-                    policy.RequireRole("Mechanic"));
-
-                // Solo Recepcionista
-                options.AddPolicy("RecepcionistOnly", policy =>
-                    policy.RequireRole("Recepcionist"));
-
-                // Admins o Mechanics
-                options.AddPolicy("AdminOrMechanic", policy =>
-                    policy.RequireRole("Administrator", "Mechanic"));
-
-                // Claim de suscripción premium
-                options.AddPolicy("PremiumSubscription", policy =>
-                    policy.RequireClaim("Subscription", "Premium"));
-
-                // Paciente o Premium (ejemplo compuesto)
-                options.AddPolicy("PatientOrPremium", policy =>
-                    policy.RequireAssertion(context =>
-                        context.User.IsInRole("Patient") ||
-                        context.User.HasClaim(c => c.Type == "Subscription" && c.Value == "Premium")));
             });
         }
         public static void AddValidationErrors(this IServiceCollection services)

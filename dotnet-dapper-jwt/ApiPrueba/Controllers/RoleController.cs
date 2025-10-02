@@ -9,7 +9,7 @@ namespace ApiPrueba.Controllers
 {
     [ApiController]
     [Route("roles")]
-    [Authorize(Roles = "admin")] // Solo un admin puede gestionar roles
+    [Authorize(Roles = "admin")] 
     public class RolesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
