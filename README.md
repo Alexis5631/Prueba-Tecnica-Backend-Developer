@@ -84,14 +84,14 @@ dotnet-dapper-jwt/
    ```json
    {
      "ConnectionStrings": {
-       "DefaultConnection": "Host=localhost;Database=autotaller_db;Username=tu_usuario;Password=tu_contraseña"
+       "DefaultConnection": "Host=localhost;Database=PruebaPI;Username=tu_usuario;Password=tu_contraseña"
      }
    }
    ```
 
 4. **Ejecutar migraciones**:
    ```bash
-   dotnet ef database update --project Infrastructure --startup-project ApiPrueba
+   dotnet ef database update -p .\\Infrastructure\\ -s .\\ApiPrueba\\
    ```
 
 5. **Ejecutar la aplicación**:
@@ -296,3 +296,20 @@ curl -X POST http://localhost:8000/students \
 # Obtener todos los estudiantes
 curl http://localhost:8000/students
 ```
+
+---
+
+---
+
+## 📚 Documentación Adicional
+
+### .NET - Autotaller
+- Documentación Swagger disponible en `/swagger`
+- Configuración JWT en `Helpers/JWT.cs`
+- Manejo de errores en `Helpers/Errors/`
+
+### PHP - Sistema de Notas
+- Documentación Swagger disponible en `/swagger/index.html`
+- Especificación OpenAPI en `/swagger/swagger.json`
+
+---
