@@ -84,7 +84,7 @@ dotnet-dapper-jwt/
    ```json
    {
      "ConnectionStrings": {
-       "DefaultConnection": "Host=localhost;Database=PrueebaPI;Username=tu_usuario;Password=tu_contraseña"
+       "DefaultConnection": "Host=localhost;Database=PruebaPI;Username=tu_usuario;Password=tu_contraseña"
      }
    }
    ```
