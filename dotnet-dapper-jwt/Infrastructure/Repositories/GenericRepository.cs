@@ -39,9 +39,9 @@ namespace Infrastructure.Repositories
             return await _context.Set<T>().ToListAsync();
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id)
         {
-            var entity = await _context.Set<T>().FindAsync(id) ?? throw new KeyNotFoundException($"Entity with id {id} was not found.");
+            var entity = await _context.Set<T>().FindAsync(id);
             return entity;
         }
     

@@ -48,6 +48,12 @@ namespace ApiPrueba.Controllers
             newUser.RoleId = role.Id;
             newUser.CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
             newUser.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
+            // Hash de la contraseña y asignación al PasswordHash (requerido por la BD)
+            if (string.IsNullOrWhiteSpace(request.Password))
+                return BadRequest(new { message = "La contraseña es requerida" });
+
+            var hashedPassword = _passwordHasher.HashPassword(newUser, request.Password);
+            newUser.PasswordHash = hashedPassword;
 
             _unitOfWork.UserRepository.Add(newUser);
             await _unitOfWork.SaveAsync();

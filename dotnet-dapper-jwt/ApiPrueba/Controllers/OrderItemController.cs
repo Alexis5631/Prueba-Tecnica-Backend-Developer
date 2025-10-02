@@ -47,7 +47,7 @@ namespace ApiPrueba.Controllers
 
         // POST /order-items → agregar un ítem a una orden existente
         [HttpPost]
-        public async Task<IActionResult> AddOrderItem([FromBody] CreateOrderItemDto itemDto)
+        public async Task<IActionResult> AddOrderItem([FromBody] OrderItemDto itemDto)
         {
             var order = await _unitOfWork.OrderRepository.GetByIdAsync(itemDto.OrderId);
             if (order == null) return BadRequest(new { message = "La orden no existe" });

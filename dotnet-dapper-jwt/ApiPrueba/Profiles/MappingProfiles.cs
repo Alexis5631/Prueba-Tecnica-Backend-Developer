@@ -11,7 +11,11 @@ public class MappingProfiles : Profile
         // User mappings
         CreateMap<User, UserDto>()
             .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role != null ? src.Role.Name : null))
-            .ReverseMap();
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt.ToDateTime(TimeOnly.MinValue)))
+            .ReverseMap()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.CreatedAt)))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.UpdatedAt)));
 
         CreateMap<User, RegisterDto>()
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
