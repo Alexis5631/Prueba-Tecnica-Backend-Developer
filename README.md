@@ -77,7 +77,7 @@ dotnet-dapper-jwt/
 2. **Configurar base de datos**:
    - Instalar PostgreSQL
    - Crear base de datos
-   - Ejecutar scripts en `db/ddl.sql` y `db/dml.sql`
+   - Ejecutar scripts en `db/script.sql`
 
 3. **Configurar conexión**:
    Editar `appsettings.Development.json`:
@@ -89,20 +89,48 @@ dotnet-dapper-jwt/
    }
    ```
 
-4. **Ejecutar migraciones**:
-   ```bash
-   dotnet ef database update -p .\\Infrastructure\\ -s .\\ApiPrueba\\
-   ```
-
 5. **Ejecutar la aplicación**:
    ```bash
    cd ApiPrueba
+   dotnet build
    dotnet run
    ```
 
 6. **Acceder a la API**:
-   - API: `https://localhost:7001` (HTTPS)
-   - Swagger: `https://localhost:7001/swagger`
+   - API: `https://localhost:5066` (HTTPS)
+   - Swagger: `https://localhost:5066/swagger`
+
+7. **/api/Auth/register**
+```
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+8. **/api/Auth/addrole**
+```
+{
+  "username": "string",
+  "password": "string",
+  "role": "admin"
+}
+```
+
+9. **/api/Auth/login**
+```
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+Copiar respuesta con el token:
+```
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJqdGkiOiI0Y2I4YzRjNy1hOWE5LTQwNDYtYjhjYi1iMzM1ZjkyNWM3MDgiLCJ1aWQiOiIxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiYWRtaW4iLCJleHAiOjE3NTk0NjQwNDMsImlzcyI6IkFwaVBsYW5ldGFJUCIsImF1ZCI6IlBsYW5ldGFJUEFwaVVzZXIifQ.QHCXw5cRPRWBlfjkPFiMhTkMSzsbVfkPm98D_YFwHUw",
+```
+
+Authorization: Bearer {token}
 
 ### 🔐 Autenticación JWT
 
@@ -111,18 +139,6 @@ dotnet-dapper-jwt/
 - `POST /auth/register` - Registrar usuario
 - `POST /auth/refresh-token` - Renovar token
 - `POST /auth/logout` - Cerrar sesión
-
-#### Uso de Tokens
-```bash
-# Login
-curl -X POST https://localhost:7001/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "usuario@email.com", "password": "contraseña"}'
-
-# Usar token en requests
-curl -H "Authorization: Bearer tu_token_aqui" \
-  https://localhost:7001/api/products
-```
 
 ### 📡 Endpoints Principales
 
@@ -172,4 +188,14 @@ builder.Services.AddCustomRateLimiter();
 builder.Services.ConfigureCors();
 ```
 
+### Procedimientos/Funciones Mínimas
+- auth_user(username, password_hash)
+✅ Implementado en UserService.GetTokenAsync()
+✅ Valida credenciales y devuelve usuario con rol
+✅ Hash de contraseña con ASP.NET Core Identity
+- create_order(user_id, items JSON)
+✅ Implementado en OrderController.CreateOrder()
+✅ Crea orden y resta stock automáticamente
+✅ Validación de stock antes de crear la orden
+✅ Cálculo de total basado en precios de productos
 ---
