@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace Application.DTOs
 {
@@ -17,38 +18,48 @@ namespace Application.DTOs
     public class CreateProductDto
     {
         [Required]
-        public string? Name { get; set; }
+        [DefaultValue("")]
+        public string? Name { get; set; } = "";
         
         [Required]
-        public string? Sku { get; set; }
+        [DefaultValue("")]
+        public string? Sku { get; set; } = "";
         
         [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor a 0")]
-        public decimal Price { get; set; }
+        [Range(0, 999999.99, ErrorMessage = "El precio debe ser mayor o igual a 0")]
+        [DefaultValue(0)]
+        public decimal Price { get; set; } = 0;
         
         [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "El stock debe ser mayor o igual a 0")]
-        public int Stock { get; set; }
+        [Range(0, 999999, ErrorMessage = "El stock debe ser mayor o igual a 0")]
+        [DefaultValue(0)]
+        public int Stock { get; set; } = 0;
         
-        public string? Category { get; set; }
+        [DefaultValue("")]
+        public string? Category { get; set; } = "";
     }
 
     public class UpdateProductDto
     {
         [Required]
-        public string? Name { get; set; }
+        [DefaultValue("")]
+        public string? Name { get; set; } = "";
         
         [Required]
-        public string? Sku { get; set; }
+        [DefaultValue("")]
+        public string? Sku { get; set; } = "";
         
         [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor a 0")]
-        public decimal Price { get; set; }
+        [Range(0, 999999.99, ErrorMessage = "El precio debe ser mayor o igual a 0")]
+        [DefaultValue(0)]
+        public decimal Price { get; set; } = 0;
         
         [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "El stock debe ser mayor o igual a 0")]
-        public int Stock { get; set; }
+        [Range(0, 999999, ErrorMessage = "El stock debe ser mayor o igual a 0")]
+        [DefaultValue(0)]
+        public int Stock { get; set; } = 0;
         
-        public string? Category { get; set; }
+        [DefaultValue("")]
+        public string? Category { get; set; } = "";
     }
 }
