@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -47,7 +46,7 @@ namespace ApiPrueba.Controllers
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
         {
             var existingProduct = _unitOfWork.ProductRepository
-                .Find(p => p.Sku == productDto.Sku)
+                .FindBySku(productDto.Sku!)
                 .FirstOrDefault();
 
             if (existingProduct != null)
@@ -74,8 +73,8 @@ namespace ApiPrueba.Controllers
 
             // Validate SKU uniqueness excluding current product
             var skuInUse = _unitOfWork.ProductRepository
-                .Find(p => p.Sku == productDto.Sku && p.Id != id)
-                .Any();
+                .FindBySku(productDto.Sku!)
+                .Any(p => p.Id != id);
             if (skuInUse)
                 return BadRequest(new { message = "SKU ya registrado" });
 

@@ -6,6 +6,7 @@ namespace Application.Interfaces
 {
 	public interface IOrderRepository : IGenericRepository<Order>
 	{
+        IEnumerable<Order> FindByUserId(int userId);
 	}
 }
 

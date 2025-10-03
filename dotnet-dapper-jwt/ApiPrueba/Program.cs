@@ -1,7 +1,6 @@
 using System.Reflection;
 using ApiPrueba.Extensions;
 using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +11,8 @@ builder.Services.AddApplicationServices();
 builder.Services.AddCustomRateLimiter();
 builder.Services.AddJwt(builder.Configuration);
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<DapperContext>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -42,12 +43,6 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
-});
-
-builder.Services.AddDbContext<PruebaDbContext>(options =>
-{
-    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
-    options.UseNpgsql(connectionString);
 });
 
 var app = builder.Build();

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -31,14 +30,14 @@ namespace ApiPrueba.Controllers
         public async Task<IActionResult> CreateUser([FromBody] RegisterDto request)
         {
             var existingUser = _unitOfWork.UserRepository
-                .Find(u => u.Username!.ToLower() == request.Username!.ToLower())
+                .FindByUsername(request.Username!)
                 .FirstOrDefault();
 
             if (existingUser != null)
                 return BadRequest(new { message = "El usuario ya existe" });
 
             var role = _unitOfWork.RoleRepository
-                .Find(r => r.Name!.ToLower() == "user")
+                .FindByName("user")
                 .FirstOrDefault();
             
             if (role == null) 

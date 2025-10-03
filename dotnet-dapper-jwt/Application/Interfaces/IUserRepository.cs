@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.Entities;
 
@@ -5,8 +6,9 @@ namespace Application.Interfaces
 {
 	public interface IUserRepository : IGenericRepository<User>
 	{
-		Task<User> GetByUsernameAsync(string username);
-        Task<User> GetByRefreshTokenAsync(string refreshToken); 
+		Task<User?> GetByUsernameAsync(string username);
+        Task<User?> GetByRefreshTokenAsync(string refreshToken);
+        IEnumerable<User> FindByUsername(string username);
 	}
 }
 

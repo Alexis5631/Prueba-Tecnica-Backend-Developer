@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
 using Domain.Entities; 
 using Microsoft.AspNetCore.Authorization;
@@ -93,7 +92,7 @@ namespace ApiPrueba.Controllers
             var userId = int.Parse(User.FindFirstValue("uid") ?? "0");
 
             var orders = _unitOfWork.OrderRepository
-                .Find(o => o.UserId == userId)
+                .FindByUserId(userId)
                 .ToList();
 
             var orderDtos = _mapper.Map<List<OrderDto>>(orders);

@@ -8,7 +8,6 @@ using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using ApiPrueba.Services;
 using Microsoft.IdentityModel.Tokens;
@@ -58,8 +57,18 @@ namespace ApiPrueba.Services
             var hashedPassword = _passwordHasher.HashPassword(usuario, registerDto.Password!);
             usuario.PasswordHash = hashedPassword;
 
+            // Asignar rol "user" por defecto
+            var defaultRole = _unitOfWork.RoleRepository
+                .FindByName("user")
+                .FirstOrDefault();
+            
+            if (defaultRole != null)
+            {
+                usuario.RoleId = defaultRole.Id;
+            }
+
             var UsuarioExiste = _unitOfWork.UserRepository
-                .Find(u => u.Username!.ToLower() == registerDto.Username!.ToLower())
+                .FindByUsername(registerDto.Username!)
                 .FirstOrDefault();
 
             if (UsuarioExiste == null)
@@ -151,7 +160,7 @@ namespace ApiPrueba.Services
             }
 
             var rolExiste = _unitOfWork.RoleRepository
-                .Find(r => r.Name!.ToLower() == model.Role!.ToLower())
+                .FindByName(model.Role!)
                 .FirstOrDefault();
 
             if (rolExiste == null)
