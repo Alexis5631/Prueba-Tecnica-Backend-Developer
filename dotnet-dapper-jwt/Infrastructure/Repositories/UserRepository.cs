@@ -163,6 +163,72 @@ namespace Infrastructure.Repositories
             return new List<User>();
         }
 
+        public override async Task<IEnumerable<User>> GetAllAsync()
+        {
+            using var connection = _context.CreateConnection();
+            var sql = @"
+                SELECT u.id, u.username, u.password_hash, u.role_id, u.created_at, u.updated_at, u.is_active,
+                       r.id as role_id, r.name as role_name
+                FROM users u
+                LEFT JOIN roles r ON u.role_id = r.id
+                ORDER BY u.id";
+            
+            var results = await connection.QueryAsync(sql);
+            
+            return results.Select(result => new User
+            {
+                Id = result.id,
+                Username = result.username,
+                PasswordHash = result.password_hash,
+                RoleId = result.role_id,
+                CreatedAt = DateOnly.FromDateTime(result.created_at),
+                UpdatedAt = DateOnly.FromDateTime(result.updated_at),
+                IsActive = result.is_active,
+                Role = result.role_id != null ? new Role
+                {
+                    Id = result.role_id,
+                    Name = result.role_name
+                } : null
+            });
+        }
+
+        public override async Task<User?> GetByIdAsync(int id)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = @"
+                SELECT u.id, u.username, u.password_hash, u.role_id, u.created_at, u.updated_at, u.is_active,
+                       r.id as role_id, r.name as role_name
+                FROM users u
+                LEFT JOIN roles r ON u.role_id = r.id
+                WHERE u.id = @Id";
+            
+            var result = await connection.QueryFirstOrDefaultAsync(sql, new { Id = id });
+            
+            if (result == null) return null;
+            
+            var user = new User
+            {
+                Id = result.id,
+                Username = result.username,
+                PasswordHash = result.password_hash,
+                RoleId = result.role_id,
+                CreatedAt = DateOnly.FromDateTime(result.created_at),
+                UpdatedAt = DateOnly.FromDateTime(result.updated_at),
+                IsActive = result.is_active
+            };
+            
+            if (result.role_id != null)
+            {
+                user.Role = new Role
+                {
+                    Id = result.role_id,
+                    Name = result.role_name
+                };
+            }
+            
+            return user;
+        }
+
         public IEnumerable<User> FindByUsername(string username)
         {
             using var connection = _context.CreateConnection();

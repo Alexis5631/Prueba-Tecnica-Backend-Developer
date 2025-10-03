@@ -18,6 +18,8 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
+        protected override string TableName => "refresh_tokens";
+
         public override void Add(RefreshToken entity)
         {
             using var connection = _context.CreateConnection();

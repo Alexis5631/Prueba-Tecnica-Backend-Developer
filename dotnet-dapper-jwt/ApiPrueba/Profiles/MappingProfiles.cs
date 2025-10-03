@@ -25,7 +25,14 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
             .ReverseMap();
 
-        CreateMap<User, UpdateUserDto>().ReverseMap();
+        CreateMap<UpdateUserDto, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Role, opt => opt.Ignore())
+            .ForMember(dest => dest.RefreshTokens, opt => opt.Ignore())
+            .ForMember(dest => dest.Orders, opt => opt.Ignore());
 
         // Role mappings
         CreateMap<Role, RoleDto>()
@@ -70,7 +77,14 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.UpdatedAt)));
 
         CreateMap<OrderItem, CreateOrderItemDto>().ReverseMap();
-        CreateMap<OrderItem, UpdateOrderItemDto>().ReverseMap();
+        CreateMap<UpdateOrderItemDto, OrderItem>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.OrderId, opt => opt.Ignore())
+            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.Product, opt => opt.Ignore())
+            .ForMember(dest => dest.Order, opt => opt.Ignore());
 
         // RefreshToken mappings
         CreateMap<RefreshToken, RefreshTokenDto>()

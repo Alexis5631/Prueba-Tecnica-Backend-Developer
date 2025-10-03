@@ -18,6 +18,8 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
+        protected override string TableName => "order_items";
+
         public override void Add(OrderItem entity)
         {
             using var connection = _context.CreateConnection();
@@ -61,6 +63,64 @@ namespace Infrastructure.Repositories
             using var connection = _context.CreateConnection();
             var sql = "DELETE FROM order_items WHERE id = @Id";
             connection.Execute(sql, new { entity.Id });
+        }
+
+        public override async Task<IEnumerable<OrderItem>> GetAllAsync()
+        {
+            using var connection = _context.CreateConnection();
+            var sql = @"
+                SELECT oi.id, oi.order_id, oi.product_id, oi.quantity, oi.unit_price,
+                       p.name as product_name, p.sku as product_sku
+                FROM order_items oi
+                LEFT JOIN products p ON oi.product_id = p.id
+                ORDER BY oi.id";
+            
+            var results = await connection.QueryAsync(sql);
+            
+            return results.Select(result => new OrderItem
+            {
+                Id = result.id,
+                OrderId = result.order_id,
+                ProductId = result.product_id,
+                Quantity = result.quantity,
+                UnitPrice = result.unit_price,
+                Product = result.product_id != null ? new Product
+                {
+                    Id = result.product_id,
+                    Name = result.product_name,
+                    Sku = result.product_sku
+                } : null
+            });
+        }
+
+        public override async Task<OrderItem?> GetByIdAsync(int id)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = @"
+                SELECT oi.id, oi.order_id, oi.product_id, oi.quantity, oi.unit_price,
+                       p.name as product_name, p.sku as product_sku
+                FROM order_items oi
+                LEFT JOIN products p ON oi.product_id = p.id
+                WHERE oi.id = @Id";
+            
+            var result = await connection.QueryFirstOrDefaultAsync(sql, new { Id = id });
+            
+            if (result == null) return null;
+            
+            return new OrderItem
+            {
+                Id = result.id,
+                OrderId = result.order_id,
+                ProductId = result.product_id,
+                Quantity = result.quantity,
+                UnitPrice = result.unit_price,
+                Product = result.product_id != null ? new Product
+                {
+                    Id = result.product_id,
+                    Name = result.product_name,
+                    Sku = result.product_sku
+                } : null
+            };
         }
 
         public override IEnumerable<OrderItem> Find(System.Linq.Expressions.Expression<Func<OrderItem, bool>> expression)
